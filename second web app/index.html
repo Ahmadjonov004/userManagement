@@ -1,0 +1,648 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Advanced User Management</title>
+    <style>
+        :root {
+            --primary-color: #4a6fa5;
+            --secondary-color: #6b8cbc;
+            --light-color: #f8f9fa;
+            --dark-color: #343a40;
+            --success-color: #28a745;
+            --danger-color: #dc3545;
+            --warning-color: #ffc107;
+            --border-radius: 8px;
+            --box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            --transition: all 0.3s ease;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #f5f7fa;
+            color: var(--dark-color);
+            line-height: 1.6;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 20px;
+            background-color: white;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+        }
+
+        h1 {
+            color: var(--primary-color);
+            margin-bottom: 10px;
+        }
+
+        .stats {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 15px;
+            font-weight: bold;
+        }
+
+        .user-count {
+            color: var(--primary-color);
+        }
+
+        .age-highlight {
+            color: var(--warning-color);
+        }
+
+        .main-content {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 30px;
+        }
+
+        @media (max-width: 768px) {
+            .main-content {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .form-section, .display-section {
+            background-color: white;
+            padding: 25px;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: var(--dark-color);
+        }
+
+        input, select {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: var(--border-radius);
+            font-size: 16px;
+            transition: var(--transition);
+        }
+
+        input:focus, select:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(74, 111, 165, 0.2);
+        }
+
+        .error-message {
+            color: var(--danger-color);
+            font-size: 14px;
+            margin-top: 5px;
+            display: none;
+        }
+
+        .btn {
+            padding: 12px 20px;
+            border: none;
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 600;
+            transition: var(--transition);
+        }
+
+        .btn-primary {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: var(--secondary-color);
+        }
+
+        .btn-secondary {
+            background-color: #6c757d;
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background-color: #5a6268;
+        }
+
+        .btn-danger {
+            background-color: var(--danger-color);
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background-color: #c82333;
+        }
+
+        .btn-success {
+            background-color: var(--success-color);
+            color: white;
+        }
+
+        .btn-success:hover {
+            background-color: #218838;
+        }
+
+        .form-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .controls {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .search-box, .sort-options {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .search-box input {
+            width: 250px;
+        }
+
+        .user-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .user-card {
+            border-radius: var(--border-radius);
+            padding: 20px;
+            box-shadow: var(--box-shadow);
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .user-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .user-card.highlighted {
+            border: 2px solid var(--warning-color);
+        }
+
+        .user-card.highlighted::before {
+            content: "Senior";
+            position: absolute;
+            top: 10px;
+            right: -25px;
+            background-color: var(--warning-color);
+            color: var(--dark-color);
+            padding: 5px 30px;
+            transform: rotate(45deg);
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .user-info {
+            margin-bottom: 15px;
+        }
+
+        .user-info p {
+            margin-bottom: 8px;
+        }
+
+        .user-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .no-users {
+            text-align: center;
+            padding: 30px;
+            color: #6c757d;
+            font-style: italic;
+        }
+
+        .age-limit-control {
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid #eee;
+        }
+
+        .age-limit-control label {
+            display: inline-block;
+            margin-right: 10px;
+        }
+
+        .age-limit-control input {
+            width: 80px;
+            display: inline-block;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Advanced User Management System</h1>
+            <p>Add, edit, delete, and manage user information with ease</p>
+            <div class="stats">
+                <div class="user-count">Total Users: <span id="totalUsers">0</span></div>
+                <div class="age-highlight">Age Highlight Threshold: <input type="number" id="ageThreshold" value="60" min="1" max="120"></div>
+            </div>
+        </header>
+
+        <div class="main-content">
+            <section class="form-section">
+                <h2>User Information Form</h2>
+                <form id="userForm">
+                    <div class="form-group">
+                        <label for="name">Full Name *</label>
+                        <input type="text" id="name" placeholder="Enter full name">
+                        <div class="error-message" id="nameError">Name is required</div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="email">Email Address *</label>
+                        <input type="email" id="email" placeholder="Enter email address">
+                        <div class="error-message" id="emailError">Valid email with @ is required</div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="age">Age *</label>
+                        <input type="number" id="age" placeholder="Enter age" min="1" max="120">
+                        <div class="error-message" id="ageError">Age must be a positive number</div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="color">Favorite Color</label>
+                        <select id="color">
+                            <option value="#4a6fa5">Blue</option>
+                            <option value="#28a745">Green</option>
+                            <option value="#dc3545">Red</option>
+                            <option value="#ffc107">Yellow</option>
+                            <option value="#6f42c1">Purple</option>
+                            <option value="#fd7e14">Orange</option>
+                            <option value="#e83e8c">Pink</option>
+                            <option value="#20c997">Teal</option>
+                        </select>
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="submit" class="btn btn-primary" id="submitBtn">Add User</button>
+                        <button type="button" class="btn btn-secondary" id="cancelBtn" style="display: none;">Cancel Edit</button>
+                    </div>
+                </form>
+            </section>
+
+            <section class="display-section">
+                <div class="controls">
+                    <div class="search-box">
+                        <label for="search">Search:</label>
+                        <input type="text" id="search" placeholder="Search by name...">
+                    </div>
+                    <div class="sort-options">
+                        <label for="sort">Sort by:</label>
+                        <select id="sort">
+                            <option value="name">Name</option>
+                            <option value="age">Age</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div id="userList" class="user-cards">
+                    <!-- User cards will be dynamically inserted here -->
+                    <div class="no-users">No users found. Add a user to get started.</div>
+                </div>
+            </section>
+        </div>
+    </div>
+
+    <script>
+        // User management system
+        const userManagement = (() => {
+            // State variables
+            let users = [];
+            let editingUserId = null;
+            let ageThreshold = 60;
+
+            // DOM elements
+            const elements = {
+                userForm: document.getElementById('userForm'),
+                nameInput: document.getElementById('name'),
+                emailInput: document.getElementById('email'),
+                ageInput: document.getElementById('age'),
+                colorInput: document.getElementById('color'),
+                submitBtn: document.getElementById('submitBtn'),
+                cancelBtn: document.getElementById('cancelBtn'),
+                userList: document.getElementById('userList'),
+                searchInput: document.getElementById('search'),
+                sortSelect: document.getElementById('sort'),
+                totalUsers: document.getElementById('totalUsers'),
+                ageThresholdInput: document.getElementById('ageThreshold'),
+                errorMessages: {
+                    name: document.getElementById('nameError'),
+                    email: document.getElementById('emailError'),
+                    age: document.getElementById('ageError')
+                }
+            };
+
+            // Initialize the application
+            const init = () => {
+                loadUsersFromStorage();
+                renderUsers();
+                setupEventListeners();
+                updateUserCount();
+            };
+
+            // Set up event listeners
+            const setupEventListeners = () => {
+                elements.userForm.addEventListener('submit', handleFormSubmit);
+                elements.cancelBtn.addEventListener('click', cancelEdit);
+                elements.searchInput.addEventListener('input', handleSearch);
+                elements.sortSelect.addEventListener('change', handleSort);
+                elements.ageThresholdInput.addEventListener('change', handleAgeThresholdChange);
+            };
+
+            // Load users from localStorage
+            const loadUsersFromStorage = () => {
+                const storedUsers = localStorage.getItem('userManagementUsers');
+                if (storedUsers) {
+                    users = JSON.parse(storedUsers);
+                }
+                
+                const storedThreshold = localStorage.getItem('userManagementAgeThreshold');
+                if (storedThreshold) {
+                    ageThreshold = parseInt(storedThreshold);
+                    elements.ageThresholdInput.value = ageThreshold;
+                }
+            };
+
+            // Save users to localStorage
+            const saveUsersToStorage = () => {
+                localStorage.setItem('userManagementUsers', JSON.stringify(users));
+                localStorage.setItem('userManagementAgeThreshold', ageThreshold.toString());
+            };
+
+            // Handle form submission
+            const handleFormSubmit = (e) => {
+                e.preventDefault();
+                
+                if (!validateForm()) {
+                    return;
+                }
+                
+                const userData = {
+                    id: editingUserId || Date.now().toString(),
+                    name: elements.nameInput.value.trim(),
+                    email: elements.emailInput.value.trim(),
+                    age: parseInt(elements.ageInput.value),
+                    color: elements.colorInput.value
+                };
+                
+                if (editingUserId) {
+                    updateUser(userData);
+                } else {
+                    addUser(userData);
+                }
+                
+                resetForm();
+                renderUsers();
+                updateUserCount();
+                saveUsersToStorage();
+            };
+
+            // Validate form inputs
+            const validateForm = () => {
+                let isValid = true;
+                
+                // Validate name
+                if (!elements.nameInput.value.trim()) {
+                    showError('name', 'Name is required');
+                    isValid = false;
+                } else {
+                    hideError('name');
+                }
+                
+                // Validate email
+                const email = elements.emailInput.value.trim();
+                if (!email || !email.includes('@')) {
+                    showError('email', 'Valid email with @ is required');
+                    isValid = false;
+                } else {
+                    hideError('email');
+                }
+                
+                // Validate age
+                const age = parseInt(elements.ageInput.value);
+                if (!age || age <= 0 || age > 120) {
+                    showError('age', 'Age must be a positive number between 1 and 120');
+                    isValid = false;
+                } else {
+                    hideError('age');
+                }
+                
+                return isValid;
+            };
+
+            // Show error message
+            const showError = (field, message) => {
+                elements.errorMessages[field].textContent = message;
+                elements.errorMessages[field].style.display = 'block';
+            };
+
+            // Hide error message
+            const hideError = (field) => {
+                elements.errorMessages[field].style.display = 'none';
+            };
+
+            // Add a new user
+            const addUser = (userData) => {
+                users.push(userData);
+            };
+
+            // Update an existing user
+            const updateUser = (userData) => {
+                const index = users.findIndex(user => user.id === userData.id);
+                if (index !== -1) {
+                    users[index] = userData;
+                }
+                editingUserId = null;
+                elements.submitBtn.textContent = 'Add User';
+                elements.cancelBtn.style.display = 'none';
+            };
+
+            // Delete a user
+            const deleteUser = (userId) => {
+                if (confirm('Are you sure you want to delete this user?')) {
+                    users = users.filter(user => user.id !== userId);
+                    renderUsers();
+                    updateUserCount();
+                    saveUsersToStorage();
+                }
+            };
+
+            // Edit a user
+            const editUser = (userId) => {
+                const user = users.find(user => user.id === userId);
+                if (user) {
+                    elements.nameInput.value = user.name;
+                    elements.emailInput.value = user.email;
+                    elements.ageInput.value = user.age;
+                    elements.colorInput.value = user.color;
+                    
+                    editingUserId = userId;
+                    elements.submitBtn.textContent = 'Update User';
+                    elements.cancelBtn.style.display = 'inline-block';
+                    
+                    // Scroll to form
+                    elements.userForm.scrollIntoView({ behavior: 'smooth' });
+                }
+            };
+
+            // Cancel edit mode
+            const cancelEdit = () => {
+                editingUserId = null;
+                resetForm();
+                elements.submitBtn.textContent = 'Add User';
+                elements.cancelBtn.style.display = 'none';
+            };
+
+            // Reset form
+            const resetForm = () => {
+                elements.userForm.reset();
+                hideError('name');
+                hideError('email');
+                hideError('age');
+            };
+
+            // Render users to the DOM
+            const renderUsers = () => {
+                let filteredUsers = [...users];
+                
+                // Apply search filter
+                const searchTerm = elements.searchInput.value.toLowerCase();
+                if (searchTerm) {
+                    filteredUsers = filteredUsers.filter(user => 
+                        user.name.toLowerCase().includes(searchTerm)
+                    );
+                }
+                
+                // Apply sorting
+                const sortBy = elements.sortSelect.value;
+                filteredUsers.sort((a, b) => {
+                    if (sortBy === 'name') {
+                        return a.name.localeCompare(b.name);
+                    } else if (sortBy === 'age') {
+                        return a.age - b.age;
+                    }
+                    return 0;
+                });
+                
+                // Clear user list
+                elements.userList.innerHTML = '';
+                
+                // Display message if no users
+                if (filteredUsers.length === 0) {
+                    elements.userList.innerHTML = '<div class="no-users">No users found. Add a user to get started.</div>';
+                    return;
+                }
+                
+                // Create user cards
+                filteredUsers.forEach(user => {
+                    const userCard = document.createElement('div');
+                    userCard.className = 'user-card';
+                    userCard.style.backgroundColor = user.color + '20'; // Light background with opacity
+                    userCard.style.borderLeft = `4px solid ${user.color}`;
+                    
+                    // Add highlighted class if user exceeds age threshold
+                    if (user.age >= ageThreshold) {
+                        userCard.classList.add('highlighted');
+                    }
+                    
+                    userCard.innerHTML = `
+                        <div class="user-info">
+                            <p><strong>Name:</strong> ${user.name}</p>
+                            <p><strong>Email:</strong> ${user.email}</p>
+                            <p><strong>Age:</strong> ${user.age}</p>
+                            <p><strong>Favorite Color:</strong> 
+                                <span style="display: inline-block; width: 15px; height: 15px; background-color: ${user.color}; border-radius: 50%; vertical-align: middle; margin-left: 5px;"></span>
+                            </p>
+                        </div>
+                        <div class="user-actions">
+                            <button class="btn btn-success edit-btn" data-id="${user.id}">Edit</button>
+                            <button class="btn btn-danger delete-btn" data-id="${user.id}">Delete</button>
+                        </div>
+                    `;
+                    
+                    elements.userList.appendChild(userCard);
+                });
+                
+                // Add event listeners to edit and delete buttons
+                document.querySelectorAll('.edit-btn').forEach(btn => {
+                    btn.addEventListener('click', (e) => {
+                        editUser(e.target.dataset.id);
+                    });
+                });
+                
+                document.querySelectorAll('.delete-btn').forEach(btn => {
+                    btn.addEventListener('click', (e) => {
+                        deleteUser(e.target.dataset.id);
+                    });
+                });
+            };
+
+            // Handle search input
+            const handleSearch = () => {
+                renderUsers();
+            };
+
+            // Handle sort change
+            const handleSort = () => {
+                renderUsers();
+            };
+
+            // Handle age threshold change
+            const handleAgeThresholdChange = () => {
+                ageThreshold = parseInt(elements.ageThresholdInput.value);
+                renderUsers();
+                saveUsersToStorage();
+            };
+
+            // Update user count
+            const updateUserCount = () => {
+                elements.totalUsers.textContent = users.length;
+            };
+
+            // Public API
+            return {
+                init
+            };
+        })();
+
+        // Initialize the application when DOM is loaded
+        document.addEventListener('DOMContentLoaded', userManagement.init);
+    </script>
+</body>
+</html>

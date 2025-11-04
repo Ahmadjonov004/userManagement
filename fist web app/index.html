@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="uz">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Advanced User Management</title>
+  <link rel="stylesheet" href="./style/style.css" />
+</head>
+<body>
+  <div class="container">
+
+    <header>
+      <h1>Advanced User Management — Ro'yxat</h1>
+      <div class="controls">
+        <div class="small muted">Jami foydalanuvchilar: <strong id="totalCount">0</strong></div>
+      </div>
+    </header>
+
+    <!-- FORM -->
+    <aside class="card">
+      <h2 style="margin:0 0 8px 0">Foydalanuvchi qo'shish / tahrirlash</h2>
+
+      <form id="userForm" novalidate>
+        <input type="hidden" id="editingId" value="">
+        <div class="row">
+          <div style="flex:1">
+            <label for="name">Ism *</label>
+            <input id="name" type="text" placeholder="To'liq ism" required />
+            <div id="nameError" class="small" style="color:var(--danger);display:none"></div>
+          </div>
+        </div>
+
+        <div class="row">
+          <div style="flex:1">
+            <label for="email">Email *</label>
+            <input id="email" type="email" placeholder="misol@domain.uz" required />
+            <div id="emailError" class="small" style="color:var(--danger);display:none"></div>
+          </div>
+        </div>
+
+        <div class="row">
+          <div style="flex:1">
+            <label for="age">Yosh *</label>
+            <input id="age" type="number" min="0" placeholder="Masalan: 25" required />
+            <div id="ageError" class="small" style="color:var(--danger);display:none"></div>
+          </div>
+          <div style="width:120px">
+            <label for="favColor">Sevimli rang</label>
+            <div style="display:flex;align-items:center;gap:8px">
+              <input id="favColor" type="color" value="#2563eb" />
+              <input id="favColorLabel" type="text" class="small" placeholder="#2563eb" style="padding:8px;border-radius:8px;border:1px solid #e6e9ef" />
+            </div>
+          </div>
+        </div>
+
+        <div style="display:flex;gap:8px;margin-top:12px">
+          <button class="btn" id="submitBtn" type="submit">Qo'shish</button>
+          <button class="btn ghost" id="cancelEditBtn" type="button" style="display:none">Bekor qilish</button>
+          <button class="btn ghost" id="clearAllBtn" type="button">Barchasini o'chirish</button>
+        </div>
+
+        <p class="small muted" style="margin-top:10px">* — majburiy maydonlar. Email ichida "@" belgisi bo‘lishi kerak. Yosh musbat butun son bo‘lishi lozim.</p>
+      </form>
+
+      <hr style="margin:16px 0" />
+
+      <div>
+        <label for="ageHighlightLimit" class="small">Yosh chegarasi (ajratib ko'rsatish):</label>
+        <div style="display:flex;gap:8px;align-items:center;margin-top:6px">
+          <input id="ageHighlightLimit" type="number" min="0" placeholder="Masalan: 50" style="padding:8px;border-radius:8px;border:1px solid #e6e9ef" />
+          <button class="btn small" id="applyHighlight">Qo'llash</button>
+          <button class="btn ghost small" id="clearHighlight">Tozalash</button>
+        </div>
+      </div>
+    </aside>
+
+    <!-- LIST / TOOLBAR -->
+    <main>
+      <div class="card">
+        <div class="list-header">
+          <div style="display:flex;gap:10px;align-items:center">
+            <input id="searchInput" type="text" placeholder="Ism bo'yicha izlash..." style="padding:8px;border-radius:8px;border:1px solid #e6e9ef;width:260px" />
+            <select id="sortSelect" style="padding:8px;border-radius:8px;border:1px solid #e6e9ef">
+              <option value="created-desc">Yangi avval</option>
+              <option value="created-asc">Eskilardan</option>
+              <option value="name-asc">Ism (A → Z)</option>
+              <option value="name-desc">Ism (Z → A)</option>
+              <option value="age-asc">Yosh (kichik → katta)</option>
+              <option value="age-desc">Yosh (katta → kichik)</option>
+            </select>
+            <button class="btn ghost small" id="exportBtn" title="LocalStorage ma'lumotlarini JSON sifatida yuklab olish">Export</button>
+            <button class="btn ghost small" id="importBtn" title="LocalStorage ga JSON import qilish (fayl tanlang)">Import</button>
+            <input id="importFile" type="file" accept="application/json" style="display:none" />
+          </div>
+
+          <div class="toolbar">
+            <div class="small muted">Ko'rish: <span id="shownCount">0</span></div>
+          </div>
+        </div>
+
+        <div id="cardsWrap">
+          <div class="empty">Hozircha hech kim ro'yhatga olinmagan. Formani to'ldirib qo'shing.</div>
+        </div>
+
+      </div>
+    </main>
+
+  </div>
+
+  <script src="./js/main.js"></script>
+</body>
+</html>
