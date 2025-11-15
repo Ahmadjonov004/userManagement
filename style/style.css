@@ -85,7 +85,6 @@
     .btn.small{padding:6px 8px;font-size:13px}
     .muted{color:var(--muted)}
 
-    /* List area */
     .list-header{
       display:flex;
       justify-content:space-between;
@@ -99,7 +98,6 @@
       align-items:center;
     }
 
-    /* Cards grid */
     .cards{
       display:grid;
       grid-template-columns: repeat(auto-fill, minmax(220px,1fr));
@@ -149,7 +147,6 @@
       border:2px dashed rgba(255,0,0,0.12);
     }
 
-    /* Empty state */
     .empty{
       padding:30px;border-radius:12px;text-align:center;color:var(--muted);
     }

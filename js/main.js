@@ -1,17 +1,8 @@
 
-    /* ===========================
-       Module pattern, kod tuzilishi:
-       - state: users array, highlightLimit, editingId
-       - storageKey: localStorage kaliti
-       - init(): event listeners va dastlabki render
-       - CRUD funksiyalar: addUser, updateUser, deleteUser
-       - render() — cards render, total hisoblash
-       - helpers: validate, save/load storage, sort, filter
-       ============================ */
 
     (function(){
       const storageKey = 'advanced_users_v1';
-      let users = []; // massiv ichida {id,name,email,age,favColor,createdAt}
+      let users = []; 
       let highlightLimit = null;
       let editingId = null;
 
@@ -41,7 +32,6 @@
       const emailError = document.getElementById('emailError');
       const ageError = document.getElementById('ageError');
 
-      /* ---------- Helpers ---------- */
       function uid(){ return 'id_' + Date.now() + '_' + Math.floor(Math.random()*10000); }
 
       function saveToStorage(){
@@ -140,7 +130,6 @@
         render();
       }
 
-      /* ---------- Rendering ---------- */
       function render(){
         const q = searchInput.value.trim().toLowerCase();
         let filtered = users.filter(u => u.name.toLowerCase().includes(q));
@@ -169,7 +158,6 @@
       function createUserCard(user){
         const el = document.createElement('div');
         el.className = 'user-card';
-        // set background gradient depending on favColor (subtle)
         el.style.background = `linear-gradient(180deg, ${hexToRgba(user.favColor,0.12)} 0%, ${hexToRgba(user.favColor,0.04)} 100%)`;
         el.style.border = `1px solid ${hexToRgba(user.favColor,0.12)}`;
 
@@ -299,7 +287,6 @@
         favColorLabel.value = user.favColor;
         submitBtn.innerText = 'Yangilash';
         cancelEditBtn.style.display = 'inline-flex';
-        // scroll to top of form on small screens
         window.scrollTo({top:0,behavior:'smooth'});
       }
 
@@ -433,13 +420,11 @@
           }
         });
 
-        // initial render
         render();
       }
 
       init();
 
-      // Expose some functions to console for debugging
       window._usersApp = {
         getUsers: ()=>users,
         addUserRaw: addUser,
